@@ -66,7 +66,7 @@ resource "azurerm_windows_virtual_machine" "main" {
   network_interface_ids = [azurerm_network_interface.main.id]
   admin_username = "adminuser"
   admin_password = "P@ssw0rd1234!"
-  size ="Standard_B1s"
+  size = var.vm_size
   os_disk {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
