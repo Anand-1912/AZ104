@@ -36,7 +36,6 @@ resource "azurerm_virtual_network" "main" {
 }
 
 # Subnet
-
 resource "azurerm_subnet" "internal" {
   name = "snet-${var.suffix}-001"
   resource_group_name = azurerm_resource_group.main.name
@@ -44,9 +43,15 @@ resource "azurerm_subnet" "internal" {
   address_prefixes = ["10.0.0.0/24"]
 }
 
+# Public IP
+resource "azurerm_public_ip" "main" {
+  name = "pip-${var.suffix}-001"
+  resource_group_name = azurerm_resource_group.main.name
+  location = azurerm_resource_group.main.location
+  allocation_method = "Static"
+}
 
 # NIC
-
 resource "azurerm_network_interface" "main" {
   name = "nic-${var.suffix}-001"
   resource_group_name = azurerm_resource_group.main.name
@@ -55,7 +60,36 @@ resource "azurerm_network_interface" "main" {
     name = "internal"
     private_ip_address_allocation = "Dynamic"
     subnet_id = azurerm_subnet.internal.id
+    public_ip_address_id = azurerm_public_ip.main.id
   }
+}
+
+# Network Security Group
+resource "azurerm_network_security_group" "main" {
+  name = "nsg-${var.suffix}-001"
+  location = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+}
+
+# Network Security Rule
+resource "azurerm_network_security_rule" "rdp" {
+  name                        = "Allow_RDP"
+  priority                    = 1001
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "3389"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.main.name #mapping Security Rule with NSG
+}
+
+# Associating NIC and NSG
+resource "azurerm_network_interface_security_group_association" "example" {
+  network_interface_id      = azurerm_network_interface.main.id
+  network_security_group_id = azurerm_network_security_group.main.id
 }
 
 # VM
