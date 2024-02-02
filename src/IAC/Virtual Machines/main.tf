@@ -29,45 +29,45 @@ resource "azurerm_resource_group" "main" {
 
 # VNet
 resource "azurerm_virtual_network" "main" {
-  name = "vnet-${var.suffix}-001"
+  name                = "vnet-${var.suffix}-001"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
-  address_space =["10.0.0.0/16"]
+  location            = azurerm_resource_group.main.location
+  address_space       = ["10.0.0.0/16"]
 }
 
 # Subnet
 resource "azurerm_subnet" "internal" {
-  name = "snet-${var.suffix}-001"
-  resource_group_name = azurerm_resource_group.main.name
+  name                 = "snet-${var.suffix}-001"
+  resource_group_name  = azurerm_resource_group.main.name
   virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes = ["10.0.0.0/24"]
+  address_prefixes     = ["10.0.0.0/24"]
 }
 
 # Public IP
 resource "azurerm_public_ip" "main" {
-  name = "pip-${var.suffix}-001"
+  name                = "pip-${var.suffix}-001"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
-  allocation_method = "Static"
+  location            = azurerm_resource_group.main.location
+  allocation_method   = "Static"
 }
 
 # NIC
 resource "azurerm_network_interface" "main" {
-  name = "nic-${var.suffix}-001"
+  name                = "nic-${var.suffix}-001"
   resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
+  location            = azurerm_resource_group.main.location
   ip_configuration {
-    name = "internal"
+    name                          = "internal"
     private_ip_address_allocation = "Dynamic"
-    subnet_id = azurerm_subnet.internal.id
-    public_ip_address_id = azurerm_public_ip.main.id
+    subnet_id                     = azurerm_subnet.internal.id
+    public_ip_address_id          = azurerm_public_ip.main.id
   }
 }
 
 # Network Security Group
 resource "azurerm_network_security_group" "main" {
-  name = "nsg-${var.suffix}-001"
-  location = azurerm_resource_group.main.location
+  name                = "nsg-${var.suffix}-001"
+  location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
 }
 
@@ -94,13 +94,13 @@ resource "azurerm_network_interface_security_group_association" "example" {
 
 # VM
 resource "azurerm_windows_virtual_machine" "main" {
-  name = "vm-${var.suffix}-001"
-  resource_group_name = azurerm_resource_group.main.name
-  location = azurerm_resource_group.main.location
+  name                  = "vm-${var.suffix}-001"
+  resource_group_name   = azurerm_resource_group.main.name
+  location              = azurerm_resource_group.main.location
   network_interface_ids = [azurerm_network_interface.main.id]
-  admin_username = "adminuser"
-  admin_password = "P@ssw0rd1234!"
-  size = var.vm_size
+  admin_username        = "adminuser"
+  admin_password        = "P@ssw0rd1234!"
+  size                  = var.vm_size
   os_disk {
     storage_account_type = "Standard_LRS"
     caching              = "ReadWrite"
@@ -111,4 +111,4 @@ resource "azurerm_windows_virtual_machine" "main" {
     sku       = "2016-Datacenter"
     version   = "latest"
   }
-} 
+}
