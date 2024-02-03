@@ -86,6 +86,34 @@ resource "azurerm_network_security_rule" "rdp" {
   network_security_group_name = azurerm_network_security_group.main.name #mapping Security Rule with NSG
 }
 
+resource "azurerm_network_security_rule" "http_inbound" {
+  name                        = "Allow_Http"
+  priority                    = 1002
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "80"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.main.name #mapping Security Rule with NSG
+}
+
+resource "azurerm_network_security_rule" "https_inbound" {
+  name                        = "Allow_Https"
+  priority                    = 1003
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Tcp"
+  source_port_range           = "*"
+  destination_port_range      = "443"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.main.name
+  network_security_group_name = azurerm_network_security_group.main.name #mapping Security Rule with NSG
+}
+
 # Associating NIC and NSG
 resource "azurerm_network_interface_security_group_association" "example" {
   network_interface_id      = azurerm_network_interface.main.id
@@ -111,4 +139,23 @@ resource "azurerm_windows_virtual_machine" "main" {
     sku       = "2016-Datacenter"
     version   = "latest"
   }
+}
+
+# Custom Script Extension
+
+resource "azurerm_virtual_machine_extension" "main" {
+
+  name = "vm-iis-extension-001"
+  virtual_machine_id = azurerm_windows_virtual_machine.main.id
+  publisher            = "Microsoft.Compute"
+  type                 = "CustomScriptExtension"
+  type_handler_version = "1.8"
+
+  settings = <<SETTINGS
+  {
+    "commandToExecute": "powershell -ExecutionPolicy Unrestricted Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools"
+  }
+SETTINGS
+
+
 }
