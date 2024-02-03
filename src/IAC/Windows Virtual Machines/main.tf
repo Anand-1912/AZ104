@@ -71,7 +71,7 @@ resource "azurerm_network_security_group" "main" {
   resource_group_name = azurerm_resource_group.main.name
 }
 
-# Network Security Rule
+# Network Security Rules => This can be created using Forreach and Modules
 resource "azurerm_network_security_rule" "rdp" {
   name                        = "Allow_RDP"
   priority                    = 1001
