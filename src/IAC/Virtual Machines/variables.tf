@@ -1,18 +1,18 @@
 variable "suffix" {
   default = "Az104"
-  type = string
+  type    = string
 }
 
 variable "location" {
   default = "uksouth"
-  type = string
+  type    = string
 }
 
 variable "vm_size" {
   default = "Standard_D2_v2"
 
   validation {
-    condition = (var.vm_size == "Standard_D2_v2" || var.vm_size == "Standard_B1s" )
+    condition     = (var.vm_size == "Standard_D2_v2" || var.vm_size == "Standard_B1s")
     error_message = "Invalid VM Size"
   }
 }
