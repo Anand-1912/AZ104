@@ -15,51 +15,27 @@ terraform {
 # Provider Block and its configuration
 provider "azurerm" {
   features {
-
   }
 }
 
-# Resource Block and the configuration of the resources
-
-# Resource Group
-resource "azurerm_resource_group" "main" {
-  name     = "rg-${var.suffix}-001"
-  location = var.location
-}
-
-# VNet
-resource "azurerm_virtual_network" "main" {
-  name                = "vnet-${var.suffix}-001"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  address_space       = ["10.0.0.0/16"]
-}
-
-# Subnet
-resource "azurerm_subnet" "internal" {
-  name                 = "snet-${var.suffix}-001"
-  resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
-  address_prefixes     = ["10.0.0.0/24"]
-}
 
 # Public IP
 resource "azurerm_public_ip" "main" {
   name                = "pip-${var.suffix}-001"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
   allocation_method   = "Static"
 }
 
 # NIC
 resource "azurerm_network_interface" "main" {
   name                = "nic-${var.suffix}-001"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
   ip_configuration {
     name                          = "internal"
     private_ip_address_allocation = "Dynamic"
-    subnet_id                     = azurerm_subnet.internal.id
+    subnet_id                     = data.azurerm_subnet.internal.id
     public_ip_address_id          = azurerm_public_ip.main.id
   }
 }
@@ -67,8 +43,8 @@ resource "azurerm_network_interface" "main" {
 # Network Security Group
 resource "azurerm_network_security_group" "main" {
   name                = "nsg-${var.suffix}-001"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = data.azurerm_resource_group.main.location
+  resource_group_name = data.azurerm_resource_group.main.name
 }
 
 # Network Security Rules => This can be created using Forreach and Modules
@@ -82,7 +58,7 @@ resource "azurerm_network_security_rule" "rdp" {
   destination_port_range      = "3389"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = data.azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name #mapping Security Rule with NSG
 }
 
@@ -96,7 +72,7 @@ resource "azurerm_network_security_rule" "http_inbound" {
   destination_port_range      = "80"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = data.azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name #mapping Security Rule with NSG
 }
 
@@ -110,7 +86,7 @@ resource "azurerm_network_security_rule" "https_inbound" {
   destination_port_range      = "443"
   source_address_prefix       = "*"
   destination_address_prefix  = "*"
-  resource_group_name         = azurerm_resource_group.main.name
+  resource_group_name         = data.azurerm_resource_group.main.name
   network_security_group_name = azurerm_network_security_group.main.name #mapping Security Rule with NSG
 }
 
@@ -123,8 +99,8 @@ resource "azurerm_network_interface_security_group_association" "example" {
 # VM
 resource "azurerm_windows_virtual_machine" "main" {
   name                  = "vm-${var.suffix}-001"
-  resource_group_name   = azurerm_resource_group.main.name
-  location              = azurerm_resource_group.main.location
+  resource_group_name   = data.azurerm_resource_group.main.name
+  location              = data.azurerm_resource_group.main.location
   network_interface_ids = [azurerm_network_interface.main.id]
   admin_username        = "adminuser"
   admin_password        = "P@ssw0rd1234!"
@@ -145,8 +121,9 @@ resource "azurerm_windows_virtual_machine" "main" {
 
 resource "azurerm_virtual_machine_extension" "main" {
 
-  name = "vm-iis-extension-001"
-  virtual_machine_id = azurerm_windows_virtual_machine.main.id
+  count                = var.install_iis == true ? 1 : 0
+  name                 = "vm-iis-extension-001"
+  virtual_machine_id   = azurerm_windows_virtual_machine.main.id
   publisher            = "Microsoft.Compute"
   type                 = "CustomScriptExtension"
   type_handler_version = "1.8"

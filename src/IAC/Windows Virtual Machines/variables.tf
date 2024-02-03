@@ -16,3 +16,8 @@ variable "vm_size" {
     error_message = "Invalid VM Size"
   }
 }
+
+variable "install_iis" {
+  type    = bool
+  default = false
+}
