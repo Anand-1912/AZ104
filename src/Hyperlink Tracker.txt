@@ -11,3 +11,7 @@
 4) VM Products
 
    https://azure.microsoft.com/en-us/pricing/details/virtual-machines/series/
+
+5) MadeByGPS
+
+   https://github.com/madebygps/projects
