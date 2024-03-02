@@ -34,7 +34,6 @@ jobs:
           OWNER="${{github.repository_owner}}"
           BRANCH="${{ github.ref_name }}"
           HEAD="$OWNER:$BRANCH"
-          echo HEAD \
           curl -X POST \
             -H "Authorization: token $TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
