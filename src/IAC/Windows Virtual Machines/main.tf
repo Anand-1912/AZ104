@@ -128,6 +128,7 @@ resource "azurerm_virtual_machine_extension" "main" {
   type                 = "CustomScriptExtension"
   type_handler_version = "1.8"
 
+   # "here document" 
   settings = <<SETTINGS
   {
     "commandToExecute": "powershell -ExecutionPolicy Unrestricted Install-WindowsFeature -Name Web-Server -IncludeAllSubFeature -IncludeManagementTools"
