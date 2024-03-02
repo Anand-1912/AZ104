@@ -18,12 +18,14 @@ jobs:
       - name: Echo Context Value
         run: |
           REPO="${{ github.repository }}"
+          BRANCH="${{ github.ref_name }}"
           OWNER="${{github.repository_owner}}"
           echo "Repository owner is ${{ github.repository_owner }}"
           echo "Repository name is ${{ github.repository }}"
           echo "Branch name is ${{ github.ref }}"
           echo "Branch name is ${{ github.ref_name }}"
           echo "https://api.github.com/repos/$OWNER/$REPO/pulls" \
+          exho "$OWNER:$BRANCH"
 
       - name: Create pull request
         run: |
@@ -37,6 +39,6 @@ jobs:
             -d '{
                   "title": "Auto Merge Changes",
                   "body": "This pull request was automatically created to merge changes into the main branch.",
-                  "head": "$BRANCH",
+                  "head": "Anand-1912:AZ104",
                   "base": "main"
                 }'
