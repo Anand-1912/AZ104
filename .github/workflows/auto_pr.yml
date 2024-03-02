@@ -19,7 +19,7 @@ jobs:
         run: |
           TOKEN="${{ secrets.GITHUB_TOKEN }}"
           REPO="${{ github.repository }}"
-          OWNER = "${{github.repository_owner}}"
+          OWNER="${{github.repository_owner}}"
           BRANCH="${{ github.ref }}"
           curl -X POST \
             -H "Authorization: token $TOKEN" \
