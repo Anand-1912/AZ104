@@ -20,6 +20,7 @@ jobs:
           REPO="${{ github.repository }}"
           BRANCH="${{ github.ref_name }}"
           OWNER="${{github.repository_owner}}"
+          HEAD=$OWNER:$BRANCH
           echo "Repository owner is ${{ github.repository_owner }}"
           echo "Repository name is ${{ github.repository }}"
           echo "Branch name is ${{ github.ref }}"
@@ -33,7 +34,7 @@ jobs:
           REPO="${{ github.repository }}"
           OWNER="${{github.repository_owner}}"
           BRANCH="${{ github.ref_name }}"
-          HEAD="$OWNER:$BRANCH"
+          HEAD=$OWNER:$BRANCH
           curl -X POST \
             -H "Authorization: token $TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
