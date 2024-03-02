@@ -25,19 +25,18 @@ jobs:
           echo "Branch name is ${{ github.ref_name }}"
           echo "https://api.github.com/repos/$OWNER/$REPO/pulls" \
 
-      # - name: Create pull request
-      #   run: |
-      #     TOKEN="${{ secrets.GITHUB_TOKEN }}"
-      #     REPO="${{ github.repository }}"
-      #     OWNER="${{github.repository_owner}}"
-      #     BRANCH="${{ github.ref_name }}"
-      #     curl -X POST \
-      #       -H "Authorization: token $TOKEN" \
-      #       -H "Accept: application/vnd.github.v3+json" \
-      #       "https://api.github.com/repos/$OWNER/$REPO/pulls" \
-      #       -d '{
-      #             "title": "Auto Merge Changes",
-      #             "body": "This pull request was automatically created to merge changes into the main branch.",
-      #             "head": "$BRANCH",
-      #             "base": "main"
-      #           }'
+      - name: Create pull request
+        run: |
+          TOKEN="${{ secrets.GITHUB_TOKEN }}"
+          REPO="${{ github.repository }}"
+          BRANCH="${{ github.ref_name }}"
+          curl -X POST \
+            -H "Authorization: token $TOKEN" \
+            -H "Accept: application/vnd.github.v3+json" \
+            "https://api.github.com/repos/$REPO/pulls" \
+            -d '{
+                  "title": "Auto Merge Changes",
+                  "body": "This pull request was automatically created to merge changes into the main branch.",
+                  "head": "$BRANCH",
+                  "base": "main"
+                }'
