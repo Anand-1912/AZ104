@@ -26,7 +26,8 @@ jobs:
           echo "Branch name is ${{ github.ref }}"
           echo "Branch name is ${{ github.ref_name }}"
           echo "https://api.github.com/repos/REPO/pulls"
-          echo "$OWNER:$BRANCH" \
+          echo "$OWNER:$BRANCH" 
+          echo $HEAD\
 
       - name: Create pull request
         run: |
@@ -42,6 +43,6 @@ jobs:
             -d '{
                   "title": "Auto Merge Changes",
                   "body": "This pull request was automatically created to merge changes into the main branch.",
-                  "head": "$HEAD",
+                  "head": $HEAD,
                   "base": "main"
                 }'
