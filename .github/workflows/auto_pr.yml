@@ -33,6 +33,8 @@ jobs:
           REPO="${{ github.repository }}"
           OWNER="${{github.repository_owner}}"
           BRANCH="${{ github.ref_name }}"
+          HEAD="$OWNER:$BRANCH"
+          echo HEAD \
           curl -X POST \
             -H "Authorization: token $TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
@@ -40,6 +42,6 @@ jobs:
             -d '{
                   "title": "Auto Merge Changes",
                   "body": "This pull request was automatically created to merge changes into the main branch.",
-                  "head": "Anand-1912:task/blob-storage-life-cycle-management",
+                  "head": "$HEAD",
                   "base": "main"
                 }'
