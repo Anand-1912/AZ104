@@ -17,10 +17,13 @@ jobs:
 
       - name: Echo Context Value
         run: |
+          REPO="${{ github.repository }}"
+          OWNER="${{github.repository_owner}}"
           echo "Repository owner is ${{ github.repository_owner }}"
           echo "Repository name is ${{ github.repository }}"
           echo "Branch name is ${{ github.ref }}"
           echo "Branch name is ${{ github.ref_name }}"
+          echo "https://api.github.com/repos/$OWNER/$REPO/pulls" \
 
       # - name: Create pull request
       #   run: |
