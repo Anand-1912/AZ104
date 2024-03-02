@@ -13,6 +13,11 @@ resource "azurerm_storage_account" "main" {
   allow_nested_items_to_be_public = true
   shared_access_key_enabled       = true
 
+  blob_properties {
+    change_feed_enabled = true
+    versioning_enabled  = true
+  }
+
   tags = {
     course = "az104"
   }
