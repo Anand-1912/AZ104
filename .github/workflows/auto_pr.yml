@@ -41,7 +41,7 @@ jobs:
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/$REPO/pulls" \
             -d "{
-                  \"title\": \"Auto Merge Changes\",
+                  \"title\": \"Auto Merge Changes from $BRANCH to main\",
                   \"body\": \"This pull request was automatically created to merge changes into the main branch.\",
                   \"head\": \"$HEAD\",
                   \"base\": \"main\"
