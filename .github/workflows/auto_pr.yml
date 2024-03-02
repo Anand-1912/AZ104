@@ -8,25 +8,41 @@ permissions:
   pull-requests: write
 
 jobs:
-  auto-merge:
+  create-pr:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # - name: Echo Context Value
+      #   run: |
+      #     REPO="${{ github.repository }}"
+      #     BRANCH="${{ github.ref_name }}"
+      #     OWNER="${{github.repository_owner}}"
+      #     HEAD=$OWNER:$BRANCH
+      #     echo "Repository owner is ${{ github.repository_owner }}"
+      #     echo "Repository name is ${{ github.repository }}"
+      #     echo "Branch name is ${{ github.ref }}"
+      #     echo "Branch name is ${{ github.ref_name }}"
+      #     echo "https://api.github.com/repos/REPO/pulls"
+      #     echo "$OWNER:$BRANCH" 
+      #     echo $HEAD\
+
       - name: Create pull request
         run: |
           TOKEN="${{ secrets.GITHUB_TOKEN }}"
           REPO="${{ github.repository }}"
-          BRANCH="${{ github.ref }}"
+          OWNER="${{github.repository_owner}}"
+          BRANCH="${{ github.ref_name }}"
+          HEAD=$OWNER:$BRANCH
           curl -X POST \
             -H "Authorization: token $TOKEN" \
             -H "Accept: application/vnd.github.v3+json" \
             "https://api.github.com/repos/$REPO/pulls" \
-            -d '{
-                  "title": "Auto Merge Changes",
-                  "body": "This pull request was automatically created to merge changes into the main branch.",
-                  "head": "$BRANCH",
-                  "base": "main"
-                }'
+            -d "{
+                  \"title\": \"Auto Merge Changes from $BRANCH to main\",
+                  \"body\": \"This pull request was automatically created to merge changes into the main branch.\",
+                  \"head\": \"$HEAD\",
+                  \"base\": \"main\"
+                }"
