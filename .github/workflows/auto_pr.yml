@@ -40,6 +40,6 @@ jobs:
             -d '{
                   "title": "Auto Merge Changes",
                   "body": "This pull request was automatically created to merge changes into the main branch.",
-                  "head": "${OWNER}:${BRANCH}",
+                  "head": "Anand-1912:task/blob-storage-life-cycle-management",
                   "base": "main"
                 }'
