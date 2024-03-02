@@ -24,8 +24,8 @@ jobs:
           echo "Repository name is ${{ github.repository }}"
           echo "Branch name is ${{ github.ref }}"
           echo "Branch name is ${{ github.ref_name }}"
-          echo "https://api.github.com/repos/$OWNER/$REPO/pulls" \
-          echo "$OWNER:$BRANCH"
+          echo "https://api.github.com/repos/REPO/pulls"
+          echo "$OWNER:$BRANCH" \
 
       - name: Create pull request
         run: |
@@ -39,6 +39,6 @@ jobs:
             -d '{
                   "title": "Auto Merge Changes",
                   "body": "This pull request was automatically created to merge changes into the main branch.",
-                  "head": "$BRANCH",
+                  "head": "Anand-1912:task/blob-storage-life-cycle-management",
                   "base": "main"
                 }'
