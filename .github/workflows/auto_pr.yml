@@ -2,8 +2,8 @@ name: Auto Pull Request
 
 on:
   push:
-    branches:
-      - '*'
+    branches-ignore:
+      - main
 permissions:
   pull-requests: write
 
