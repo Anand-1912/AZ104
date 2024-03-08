@@ -1,1 +1,1 @@
-# AZ104 using Terraform
+# Practical AZ 104 - Azure Administrator 
