@@ -1,0 +1,1 @@
+az vm create -g "app-grp" -n "linuxvm" --image "Canonical:0001-com-ubuntu-server-focal:20_04-lts:latest" --admin-username "linuxusr" --admin-password "AzurePassword@123" --custom-data config.txt
