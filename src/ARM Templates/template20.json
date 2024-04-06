@@ -1,0 +1,195 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {},
+    "functions": [],
+    "resources": [
+        {
+            "name": "appnetwork",
+            "type": "Microsoft.Network/virtualNetworks",
+            "apiVersion": "2022-07-01",
+            "location": "[resourceGroup().location]",
+            "properties": {
+                "addressSpace": {
+                    "addressPrefixes": [
+                        "10.0.0.0/16"
+                    ]
+                },
+                "subnets": [
+                    {
+                        "name": "SubnetA",
+                        "properties": {
+                            "addressPrefix": "10.0.0.0/24"
+                        }
+                    },
+                    {
+                        "name": "SubnetB",
+                        "properties": {
+                            "addressPrefix": "10.0.1.0/24"
+                        }
+                    }
+                ]
+            }
+        },
+        {
+            "name": "app-ip",
+            "type": "Microsoft.Network/publicIPAddresses",
+            "apiVersion": "2022-07-01",
+            "location": "[resourceGroup().location]",
+            "sku": {
+                "name": "Basic"
+            },
+            "properties": {
+                "publicIPAllocationMethod": "Dynamic"
+            }
+        },
+        {
+            "name": "app-interface",
+            "type": "Microsoft.Network/networkInterfaces",
+            "apiVersion": "2022-07-01",
+            "location": "[resourceGroup().location]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Network/virtualNetworks', 'appnetwork')]",
+                "[resourceId('Microsoft.Network/publicIPAddresses', 'app-ip')]",
+                "[resourceId('Microsoft.Network/networkSecurityGroups', 'app-nsg')]"
+            ],
+            "properties": {
+                "ipConfigurations": [
+                    {
+                        "name": "ipConfig1",
+                        "properties": {
+                            "privateIPAllocationMethod": "Dynamic",
+                            "subnet": {
+                                "id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', 'appnetwork', 'SubnetA')]"
+                            },
+                            "publicIPAddress":{
+                                "id":"[resourceId('Microsoft.Network/publicIPAddresses', 'app-ip')]"
+                            }
+                        }
+                    }
+                ],
+                "networkSecurityGroup": {
+                    "id":"[resourceId('Microsoft.Network/networkSecurityGroups', 'app-nsg')]"
+                }
+            }
+        },
+     {
+        "name": "vmstore44434434",
+        "type": "Microsoft.Storage/storageAccounts",
+        "apiVersion": "2022-09-01",
+        "location": "[resourceGroup().location]",
+        "kind": "StorageV2",
+        "sku": {
+            "name": "Standard_LRS"
+        }
+     },
+  {
+    "name": "app-nsg",
+    "type": "Microsoft.Network/networkSecurityGroups",
+    "apiVersion": "2022-07-01",
+    "location": "[resourceGroup().location]",
+    "properties": {
+        "securityRules": [
+            {
+                "name": "Allow-RDP",
+                "properties": {
+                    "description": "Allow Remote Desktop",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "3389",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 100,
+                    "direction": "Inbound"
+                }
+            },
+            {
+                "name": "Allow-HTTP",
+                "properties": {
+                    "description": "Allow HTTP Traffic",
+                    "protocol": "Tcp",
+                    "sourcePortRange": "*",
+                    "destinationPortRange": "80",
+                    "sourceAddressPrefix": "*",
+                    "destinationAddressPrefix": "*",
+                    "access": "Allow",
+                    "priority": 200,
+                    "direction": "Inbound"
+                }
+            }
+        ]
+    }
+  },
+  {
+    "name": "[concat('appvm','/config-app')]",
+    "type": "Microsoft.Compute/virtualMachines/extensions",
+    "apiVersion": "2022-11-01",
+    "location": "[resourceGroup().location]",
+    "dependsOn": [
+        "[resourceId('Microsoft.Compute/virtualMachines', 'appvm')]"
+    ],
+    "properties": {
+        "publisher": "Microsoft.Compute",
+        "type": "CustomScriptExtension",
+        "typeHandlerVersion": "1.10",
+        "autoUpgradeMinorVersion": true,
+        "settings": {
+            "fileUris": [
+                "https://appstore4443323.blob.core.windows.net/scripts/setup.ps1?sp=r&st=2023-04-10T13:28:22Z&se=2023-04-10T21:28:22Z&spr=https&sv=2021-12-02&sr=b&sig=e80wGYnJdwBKEzCodAqgAC%2Fls%2BORDOvTo8G98rliKUc%3D"
+            ]
+        },
+        "protectedSettings": {
+            "commandToExecute": "powershell -ExecutionPolicy Unrestricted -File setup.ps1"
+        }
+    }
+  },  
+{
+    "name": "appvm",
+    "type": "Microsoft.Compute/virtualMachines",
+    "apiVersion": "2022-11-01",
+    "location": "[resourceGroup().location]",
+    "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', toLower('vmstore44434434'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces', 'app-interface')]"
+    ],
+    "properties": {
+        "hardwareProfile": {
+            "vmSize": "Standard_D2s_v3"
+        },
+        "osProfile": {
+            "computerName": "appvm",
+            "adminUsername": "appusr",
+            "adminPassword": "Azure@123"
+        },
+        "storageProfile": {
+            "imageReference": {
+                "publisher": "MicrosoftWindowsServer",
+                "offer": "WindowsServer",
+                "sku": "2022-Datacenter",
+                "version": "latest"
+            },
+            "osDisk": {
+                "name": "windowsVM1OSDisk",
+                "caching": "ReadWrite",
+                "createOption": "FromImage"
+            }
+        },
+        "networkProfile": {
+            "networkInterfaces": [
+                {
+                    "id": "[resourceId('Microsoft.Network/networkInterfaces', 'app-interface')]"
+                }
+            ]
+        },
+        "diagnosticsProfile": {
+            "bootDiagnostics": {
+                "enabled": true,
+                "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('vmstore44434434'))).primaryEndpoints.blob]"
+            }
+        }
+    }
+}
+    ],
+    "outputs": {}
+}
