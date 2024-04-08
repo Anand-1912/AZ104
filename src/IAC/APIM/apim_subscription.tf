@@ -2,8 +2,8 @@ resource "azurerm_api_management_product" "apim_product" {
 
   api_management_name = data.azurerm_api_management.apim.name
   resource_group_name = data.azurerm_api_management.apim.resource_group_name
-  product_id            = "external_apis"
-  display_name          = "External APIs"
+  product_id            = "coupon_apis"
+  display_name          = "Coupon APIs"
   published             = true
   subscription_required = true
   
@@ -29,7 +29,7 @@ resource "azurerm_api_management_subscription" "apim_subscription" {
   api_management_name = data.azurerm_api_management.apim.name
   resource_group_name = data.azurerm_api_management.apim.resource_group_name
 
-  display_name  = "Exchange Rate Service Subscription"
+  display_name  = "Coupon API Subscription"
   product_id    = azurerm_api_management_product.apim_product.id
   state         = "active"
   primary_key   = var.primary_apim_key
