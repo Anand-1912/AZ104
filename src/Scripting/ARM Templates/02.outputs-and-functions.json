@@ -1,0 +1,13 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [],
+  "outputs": {
+    "uniqueString": {
+      "type": "string",
+      "value": "[uniqueString('resourceGroup().id')]" //Id will be unique for a resource group
+    }
+  }
+}
+
+// "uniqueString" function returns the same unique string for a given input.
