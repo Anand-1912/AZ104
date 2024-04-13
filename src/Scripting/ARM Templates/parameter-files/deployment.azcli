@@ -1,0 +1,17 @@
+az group create -n "rg-deployment" -l "uksouth"
+
+
+# deprecated
+az group deployment create -g "rg-deployment" -n "dev-deployment" --template-file main_template.json --parameters @main-template.dev.parameters.json
+
+az group deployment create -g "rg-deployment" -n "test-deployment" --template-file main_template.json --parameters @main-template.test.parameters.json
+
+
+az deployment 
+group create --resource-group "rg-deployment" 
+--name "test-deployment" 
+--template-file main_template.json 
+--parameters @main-template.test.parameters.json
+
+
+az deployment group create --resource-group "rg-deployment" --name "dev-deployment" --template-file "main_template.json" --parameters @main-template.dev.parameters.json `
