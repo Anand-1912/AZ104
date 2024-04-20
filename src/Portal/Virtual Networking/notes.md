@@ -4,6 +4,8 @@
 
 2. [VNet Peering](https://learn.microsoft.com/en-us/training/modules/configure-vnet-peering/2-determine-uses)
 
+3. [Gateway Transit - Hub Spoke](https://azure.microsoft.com/en-us/blog/create-a-transit-vnet-using-vnet-peering/)
+
 ## Keypoints
 
 **Subnets**
