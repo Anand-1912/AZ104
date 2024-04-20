@@ -21,3 +21,6 @@ Object Replication is for blobs.
 - New
 
 Note: Versioning can be enabled even after the storage account is created.
+
+5. Object Replication does not replicate Snapshots from Source to Destination Storage account.
+

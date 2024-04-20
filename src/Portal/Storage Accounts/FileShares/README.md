@@ -2,6 +2,8 @@
 
 1. [TebiBytes]([https://www.techtarget.com/searchstorage/definition/tebibyte-TiB])
 
+2. [Snapshots](https://learn.microsoft.com/en-us/training/modules/configure-azure-files-file-sync/4-create-file-share-snapshots)
+
 ## Key Points
 
 1. **Types**
@@ -32,5 +34,11 @@
    - Automated Snapshot using Auto Backup configuration
 
      - Backups are stored using _Azure Recovery Services Vault_
+   - Read only
 
 3. Soft Delete Support
+
+- Can be enabled for **SMB** based File Shares only
+- Can be enabled on existing and New file shares
+- Can be retained for 1 to 365 days
+

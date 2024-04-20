@@ -1,7 +1,3 @@
-### Notes
-
----
-
 1. Guest users cannot enumerate all the users by default.
 
 2. Guest users cannot enumerate all the groups by default.
