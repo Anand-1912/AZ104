@@ -8,6 +8,8 @@
 
 ## Key Points
 
+Application Gateway needs its own subnet in a VNet where it is deployed to main its own resources
+
 1. Layer 7 routing
 2. Supported Protocols
    - Http
