@@ -6,7 +6,7 @@ resource "azurerm_api_management_api_operation" "get_coupons" {
   display_name        = "GetCoupons"
   method              = "GET"
   url_template        = "/api/coupon"
-  description         = "Retrieve the exchange rates."
+  description         = "Retrieve the coupons"
 
  response {
     status_code = 200
