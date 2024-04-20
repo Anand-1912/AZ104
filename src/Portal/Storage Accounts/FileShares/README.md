@@ -35,7 +35,7 @@
 
      - Backups are stored using _Azure Recovery Services Vault_
 
-   -
+   - Read only
 
 3. Soft Delete Support
 
