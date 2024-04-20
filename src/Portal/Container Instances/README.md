@@ -12,4 +12,4 @@
 
    eg: 1 vCPU, 1.5 GiB Memory and 1 GPU
 
-7. **Networking Options: ** Public, Private and None
+7. **Networking Options :** Public, Private and None
