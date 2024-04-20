@@ -1,6 +1,4 @@
-References
-
----
+## References
 
 1. [Deployment Slots](https://learn.microsoft.com/en-us/training/modules/configure-azure-app-services/5-create-deployment-slots)
 
