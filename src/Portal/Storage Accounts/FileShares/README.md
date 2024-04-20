@@ -34,7 +34,6 @@
    - Automated Snapshot using Auto Backup configuration
 
      - Backups are stored using _Azure Recovery Services Vault_
-
    - Read only
 
 3. Soft Delete Support
@@ -42,3 +41,4 @@
 - Can be enabled for **SMB** based File Shares only
 - Can be enabled on existing and New file shares
 - Can be retained for 1 to 365 days
+

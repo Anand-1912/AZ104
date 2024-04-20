@@ -29,3 +29,4 @@
 - Data is encrypted automatically before it's persisted to _Azure Managed Disks, Azure Blob Storage, Azure Queue Storage, Azure Cosmos DB, Azure Table Storage, or Azure Files_.
 
 - Azure Storage encryption is enabled for all new and existing storage accounts and can't be disabled.
+
