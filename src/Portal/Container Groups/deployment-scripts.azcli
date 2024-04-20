@@ -1,0 +1,7 @@
+az group create --name myResourceGroup --location eastus
+
+az container create --resource-group myResourceGroup --file deploy-aci.yaml
+
+az container show --resource-group myResourceGroup --name myContainerGroup --output table
+
+az container logs --resource-group myResourceGroup --name myContainerGroup --container-name aci-tutorial-app
