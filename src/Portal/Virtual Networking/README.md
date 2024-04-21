@@ -10,7 +10,7 @@
 
 **Subnets**
 
-1. A subnet can be associated with Zero or one NSG
+1. A subnet can be associated with Zero or one NSG (atmost 1 NSG)
 
 2. One NSG can be mapped to many Subnets
 
